@@ -1,9 +1,10 @@
 /*
  * Author: Wen Chih Lo
  * Date: 2016.9.22
- * Purpose:
+ * Purpose: The implement of my own dup2 function.
  * */
 
+#include "hw2.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -23,41 +24,6 @@
 #define debug_printSTR(x)
 #endif
 
-int dup2_l( int oldfd, int newfd );
-
-int main(void) {
-    int fd1, fd2, retn;
-    char *str1 = "This is output from fd1.\n";
-    char *str2 = "This is output from fd2.\n";
-
-    fd1 = open("4test.txt", (O_RDWR|O_CREAT), 0644);
-    
-    fd2 = -1;
-    debug_printSTR("Before dup2,");
-    debug_printINT(fd1);
-    debug_printINT(fd2);
-
-    debug_printSTR("-------------------");
-
-    fd2 = 87;
-    retn = dup2_l(fd1, fd2);
-    if( retn != -1 ) {
-        debug_printSTR("After dup2,");
-        debug_printINT(fd1);
-        debug_printINT(fd2);
-        debug_printINT(retn);
-    }
-    else
-        fprintf(stderr, "retn = -1\n");
-    
-    if( write(fd1, str1, strlen(str1)) == -1 )
-        fprintf(stderr, "Invalid write.\n");
-
-    if( write(fd2, str2, strlen(str2)) == -1 )
-        fprintf(stderr, "Invalid write.\n");
-
-    return 0;
-}
 
 int dup2_l( int oldfd, int newfd ) {
 
