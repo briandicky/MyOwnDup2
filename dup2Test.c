@@ -1,7 +1,7 @@
 /*
  * Author: Wen Chih Lo, NMSL
  * Date: 2016.9.27
- * Purpose: 
+ * Purpose: Try to test the my own dup2 function.
  * */
 
 #include <stdio.h>
