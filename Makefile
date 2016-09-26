@@ -1,7 +1,8 @@
 CC = gcc
 override CFLAGS += -c -Wall -O2
 LDFLAGS =
-SOURCES = hw2_105062620.c
+SOURCES = hw2_105062620.c dup2Test.c
+DELE = .depend 4test.txt
 OBJ = $(SOURCES:.c=.o)
 EXE = dup2
 
@@ -17,7 +18,7 @@ dep:
 	$(CC) -M *.c > .depend
 
 clean:
-	rm -f $(OBJ) $(EXE) .depend
+	rm -f $(OBJ) $(EXE) $(DELE)
 
 DEBUG:
 	@echo "Debugger mode, type this to compile your code:"
