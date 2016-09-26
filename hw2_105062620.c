@@ -26,7 +26,10 @@ int dup2_l( int oldfd, int newfd ) {
         return -1;
 
     /* If the oldfd is invalid, then print the error message and return -1.
-     * Do not use the read() or write() function, because they may change the files.
+     * Do not use the read() or write() or dup() function, because they may change somethings.
+     * dup() -> if all the fd are used, it will cause EMFILE.
+     * write() -> it may change the file.
+     * read() -> it may change the offset of file.
      * And read() & write() may cause race condition, but lseek is atomic.*/
     if( (lseek(oldfd, 0, SEEK_CUR) == -1) && (errno == EBADF) ) {
         fprintf(stderr, "Invalid file descriptor %d.\n", oldfd);
@@ -43,7 +46,7 @@ int dup2_l( int oldfd, int newfd ) {
     /* Try to find the target file descriptor*/
     for( i = 0 ; i < 256 ; i++) {
         if( ( fd[i] = dup(oldfd) ) < 0 ) {
-            printf( "dup: %s\n", strerror(errno) );
+            fprintf( stderr, "dup: %s\n", strerror(errno) );
 
             while( --i > 0 )
                 close(fd[i]);
