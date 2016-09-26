@@ -14,16 +14,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#define __DEBUG__ 666
-
-#ifdef __DEBUG__
-#define debug_printINT(x) printf("%s = %d\n", #x, (x)); 
-#define debug_printSTR(x) printf("%s\n", #x);
-#else
-#define debug_printINT(x)
-#define debug_printSTR(x)
-#endif
-
 
 int dup2_l( int oldfd, int newfd ) {
 
@@ -31,13 +21,14 @@ int dup2_l( int oldfd, int newfd ) {
     int i;
     memset(fd, 0, sizeof(fd));
 
-    /* If the file descriptor is overflow, then return -1.*/
+    /* If the file descriptor is out of range, then return -1.*/
     if( newfd >= 256 || newfd < 0 )
         return -1;
 
     /* If the oldfd is invalid, then print the error message and return -1.
-     * Do not use the read() or write() function, because they may change the files.*/
-    if( lseek(oldfd, 0, SEEK_CUR) == -1 && errno == EBADF ) {
+     * Do not use the read() or write() function, because they may change the files.
+     * And read() & write() may cause race condition, but lseek is atomic.*/
+    if( (lseek(oldfd, 0, SEEK_CUR) == -1) && (errno == EBADF) ) {
         fprintf(stderr, "Invalid file descriptor %d.\n", oldfd);
         return -1;
     }
@@ -60,6 +51,7 @@ int dup2_l( int oldfd, int newfd ) {
             return -1;
         }
 
+        /* Find the target file descripter. */
         if( fd[i] == newfd )
             break;
     }
