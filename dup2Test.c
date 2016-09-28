@@ -31,7 +31,7 @@ int main(void) {
 
     fd1 = open("4test.txt", (O_RDWR|O_CREAT), 0644);
     
-    fd2 = -1;
+    fd2 = -666;
     debug_printSTR("Before dup2,");
     debug_printINT(fd1);
     debug_printINT(fd2);
@@ -47,13 +47,13 @@ int main(void) {
         debug_printINT(retn);
     }
     else
-        fprintf(stderr, "retn = -1\n");
+        fprintf(stderr, "Dup2 function failed, and retn = -1\n");
     
     if( write(fd1, str1, strlen(str1)) == -1 )
-        fprintf(stderr, "Invalid write.\n");
+        fprintf(stderr, "Write failed.\n");
 
     if( write(fd2, str2, strlen(str2)) == -1 )
-        fprintf(stderr, "Invalid write.\n");
+        fprintf(stderr, "Write failed.\n");
 
     return 0;
 }
