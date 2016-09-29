@@ -1,8 +1,8 @@
 CC = gcc
 override CFLAGS += -c -Wall -O2
 LDFLAGS =
-SOURCES = hw2_105062620.c dup2Test.c
-DELE = .depend 4test.txt
+SOURCES = hw2_105062620.c test_dup2.c
+DELE = .depend 4test.txt myfile.txt
 OBJ = $(SOURCES:.c=.o)
 EXE = dup2
 
