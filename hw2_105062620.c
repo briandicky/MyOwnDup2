@@ -14,17 +14,23 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#define _MAX_FD_ 1024
 
 int mydup2( int oldfd, int newfd ) {
-
+    long _MAX_FD_ = sysconf(_SC_OPEN_MAX); 
     int fd[_MAX_FD_];
     int i;
     memset(fd, 0, sizeof(fd));
 
     /* If the file descriptor is out of range, then return -1.*/
-    if( newfd >= _MAX_FD_ || newfd < 0 )
+    if( oldfd >= _MAX_FD_ || oldfd < 0 ) {
+        errno = EBADF;
         return -1;
+    }
+
+    if( newfd >= _MAX_FD_ || newfd < 0 ) {
+        errno = EBADF;
+        return -1;
+    }
 
     /* If the oldfd is invalid, then print the error message and return -1.
      * Do not use the read() or write() or dup() function, because they may change somethings.
@@ -34,6 +40,7 @@ int mydup2( int oldfd, int newfd ) {
      * And read() & write() may cause race condition, but lseek is atomic.*/
     if( (lseek(oldfd, 0, SEEK_CUR) == -1) && (errno == EBADF) ) {
         fprintf(stderr, "Invalid file descriptor %d.\n", oldfd);
+        errno = EBADF;
         return -1;
     }
 
