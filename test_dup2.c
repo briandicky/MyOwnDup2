@@ -22,7 +22,7 @@ int main(void){
     FunDup2 mdup2 = mydup2;
 
     //Open a file to write
-    int file = open("myfile.txt", O_WRONLY | O_CREAT, 0644);
+    int file = open("myfile.txt", (O_WRONLY | O_CREAT), 0644);
     if(file < 0)return 1;
 
     char buff[] = "Pen-Pineapple-Apple-Pen\n";
