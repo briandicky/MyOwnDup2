@@ -14,15 +14,16 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#define _MAX_FD_ 1024
 
-int dup2_l( int oldfd, int newfd ) {
+int mydup2( int oldfd, int newfd ) {
 
-    int fd[256];
+    int fd[_MAX_FD_];
     int i;
     memset(fd, 0, sizeof(fd));
 
     /* If the file descriptor is out of range, then return -1.*/
-    if( newfd >= 256 || newfd < 0 )
+    if( newfd >= _MAX_FD_ || newfd < 0 )
         return -1;
 
     /* If the oldfd is invalid, then print the error message and return -1.
@@ -44,7 +45,7 @@ int dup2_l( int oldfd, int newfd ) {
     close(newfd);
 
     /* Try to find the target file descriptor*/
-    for( i = 0 ; i < 256 ; i++) {
+    for( i = 0 ; i < _MAX_FD_ ; i++) {
         if( ( fd[i] = dup(oldfd) ) < 0 ) {
             fprintf( stderr, "dup: %s\n", strerror(errno) );
 
